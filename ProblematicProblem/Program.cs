@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-public class ProblematicProblem
+class Program
 {
     static Random rng = new Random();
     static List<string> activities = new List<string>() { "Movies", "Paintball", "Bowling", "Lazer Tag", "LAN Party", "Hiking", "Axe Throwing", "Wine Tasting" };
@@ -20,6 +20,12 @@ public class ProblematicProblem
         Console.Write("What is your age? ");
         int userAge = int.Parse(Console.ReadLine());
         Console.WriteLine();
+
+        if (userAge < 21)
+        {
+            activities.Remove("Wine Tasting");
+        }
+
         Console.Write("Would you like to see the current list of activities? Sure/No thanks: ");
         bool seeList = Console.ReadLine().ToLower() == "sure";
         if (seeList)
@@ -51,34 +57,41 @@ public class ProblematicProblem
 
         while (cont)
         {
-            Console.Write("Connecting to the database");
-            for (int i = 0; i < 10; i++)
+            if (userAge >= 21 || activities.Count > 1)
             {
-                Console.Write(". ");
-                Thread.Sleep(500);
+                Console.Write("Connecting to the database");
+                for (int i = 0; i < 10; i++)
+                {
+                    Console.Write(". ");
+                    Thread.Sleep(500);
+                }
+                Console.WriteLine();
+                Console.Write("Choosing your random activity");
+                for (int i = 0; i < 9; i++)
+                {
+                    Console.Write(". ");
+                    Thread.Sleep(500);
+                }
+                Console.WriteLine();
+                var randomNumber = rng.Next(activities.Count);
+                string randomActivity = activities[randomNumber];
+                Console.Write($"Ah got it! {userName}, your random activity is: {randomActivity}! Is this ok or do you want to grab another activity? Keep/Redo: \n");
+                contInput = Console.ReadLine().ToLower();
+                cont = contInput == "keep";
+                if (cont)
+                {
+                    Console.WriteLine("You have chosen to keep your activity.");
+                    break;
+                }
             }
-            Console.WriteLine();
-            Console.Write("Choosing your random activity");
-            for (int i = 0; i < 9; i++)
+            else
             {
-                Console.Write(". ");
-                Thread.Sleep(500);
+                Console.WriteLine("There are no activities available.");
+                break;
             }
-            Console.WriteLine();
-            var randomNumber = rng.Next(activities.Count);
-            string randomActivity = activities[randomNumber];
-            if (userAge > 21 && randomActivity == "Wine Tasting")
-            {
-                Console.WriteLine($"Oh no! Looks like you are too young to do {randomActivity}");
-                Console.WriteLine("Pick something else!");
-                activities.Remove(randomActivity);
-                randomNumber = rng.Next(activities.Count);
-                randomActivity = activities[randomNumber];
-            }
-            Console.Write($"Ah got it! {randomActivity}, your random activity is: {userName}! Is this ok or do you want to grab another activity? Keep/Redo: \n");
-            contInput = Console.ReadLine().ToLower();
-            cont = contInput == "keep";
         }
     }
 }
+
+
 
